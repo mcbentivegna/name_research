@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
-from cycler import cycler
 
 MA = pd.read_csv('C:\\Users\\Michelle\\Documents\\namesbystate\\MA.txt', names = ['sex','year','name','name_count'])
 
@@ -83,12 +82,12 @@ def name_comparison_graph_v2(names_and_sex):
 
 
 
-name_dict = {
-	'name':['Mary','Maria','Marie'],
+girls_name_dict = {
+	'name':['Mary','Marie','Maria'],
 	'sex':['F','F','F']
 	}
 
-name_df = pd.DataFrame(name_dict)
+girls_name_df = pd.DataFrame(name_dict)
 
 boys_name_dict = {
 
@@ -98,6 +97,6 @@ boys_name_dict = {
 
 boys_name_df = pd.DataFrame(boys_name_dict)
 
-name_comparison_graph_v2(name_df)
+name_comparison_graph_v2(girls_name_df)
 
 
