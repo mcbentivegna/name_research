@@ -84,7 +84,7 @@ def name_comparison_graph_v2(names_and_sex):
 
 
 name_dict = {
-	'name':['Carol','Caroline','Carolyn'],
+	'name':['Mary','Maria','Marie'],
 	'sex':['F','F','F']
 	}
 
