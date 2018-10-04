@@ -61,7 +61,7 @@ def name_comparison_graph_v2(names_and_sex):
 	
 	for label, row in names_and_sex.iterrows():
 		plt.figure(1, figsize=(10,fig_height))
-		#plt.style.use('seaborn')
+		plt.style.use('seaborn')
 		ax1 = plt.subplot(subplot_col, 3, label+1)
 		name_plot(name_search(row['sex'],row['name']), plot_colors[label])
 		ax1.set_ylim(0,max_name_count)
@@ -87,7 +87,7 @@ girls_name_dict = {
 	'sex':['F','F','F']
 	}
 
-girls_name_df = pd.DataFrame(name_dict)
+girls_name_df = pd.DataFrame(girls_name_dict)
 
 boys_name_dict = {
 
