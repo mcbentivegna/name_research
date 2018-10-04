@@ -3,14 +3,20 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib
 
-MA = pd.read_csv('C:\\Users\\Michelle\\Documents\\namesbystate\\MA.txt', names = ['sex','year','name','name_count'])
 
-def name_search(sex_to_search, name_to_search):
-	name_dataframe = MA[np.logical_and(MA['sex'] == sex_to_search, MA['name'] == name_to_search)]  
+def import_state_df(state_name):
+	state_df = pd.read_csv('C:\\Users\\Michelle\\Documents\\namesbystate\\'+state_name+'.txt', names = ['sex','year','name','name_count'])
+	return state_df
+
+#return a dataframe of a particular name and sex in a particular state (i.e F, 1910, Mary, 500; F, 1910, Sarah, 450 etc.)
+def name_search(sex_to_search, name_to_search, state_df):
+	name_dataframe = state_df[np.logical_and(state_df['sex'] == sex_to_search, state_df['name'] == name_to_search)]  
 	return name_dataframe
 
-def most_popular_name_count(names):
-	most_popular_all_var= MA[MA['name'].isin(names)].max()
+#find the largest name count from a set of names. The purpose of this function is to help you know what the y-axis max should be on your graph.
+#For example, if you're comparing Caroline and Julia, and Caroline's peak popularity was 400 in 2000, and Julia's was 500 in 1990, you would want the max of your y-axis to be 500.
+def most_popular_name_count(names, state_df):
+	most_popular_all_var= state_df[state_df['name'].isin(names)].max()
 	most_popular_count =most_popular_all_var['name_count']
 	return most_popular_count
 
@@ -20,6 +26,7 @@ def sex_of_name_dataframe(sex):
 	else:
 		return 'MIX'
 
+#Build a plot of a set of names
 def name_plot(name_dataframe, my_color):
 	plt.fill_between(
 		name_dataframe['year'], 
@@ -30,7 +37,9 @@ def name_plot(name_dataframe, my_color):
 	plt.title(name_dataframe.iloc[0,2])
 
 
-def name_comparison_graph_v2(names_and_sex):
+def name_comparison_graph_v2(names_and_sex, state_name):
+	
+	state_df = import_state_df(state_name);
 	num_names = len(names_and_sex)
 
 	#colors scheme based on sex of names
@@ -47,7 +56,7 @@ def name_comparison_graph_v2(names_and_sex):
 	subplot_col = 1
 
 	#multiply by 1.1 so the top value does not hit the top of the graph
-	max_name_count = most_popular_name_count(names_and_sex['name'])*1.1
+	max_name_count = most_popular_name_count(names_and_sex['name'], state_df)*1.1
 
 
 	if num_names>5:
@@ -63,18 +72,18 @@ def name_comparison_graph_v2(names_and_sex):
 		plt.figure(1, figsize=(10,fig_height))
 		plt.style.use('seaborn')
 		ax1 = plt.subplot(subplot_col, 3, label+1)
-		name_plot(name_search(row['sex'],row['name']), plot_colors[label])
+		name_plot(name_search(row['sex'],row['name'], state_df), plot_colors[label])
 		ax1.set_ylim(0,max_name_count)
 		ax1.set_xlim(1911,2017)
 
 	ax2 = plt.subplot(subplot_col,3,num_names+1)
 
 	for label, row in names_and_sex.iterrows():
-		name_plot(name_search(row['sex'],row['name']), plot_colors[label])
+		name_plot(name_search(row['sex'],row['name'], state_df), plot_colors[label])
 		plt.title('Comparison')
 		ax2.set_ylim(0,max_name_count)
 
-	plt.suptitle('Frequency of Given Names by Year of Birth in Massachusetts')
+	plt.suptitle('Frequency of Given Names by Year of Birth in ' + state_name)
 
 
 	plt.show()
@@ -83,8 +92,8 @@ def name_comparison_graph_v2(names_and_sex):
 
 
 girls_name_dict = {
-	'name':['Mary','Marie','Maria'],
-	'sex':['F','F','F']
+	'name':['Mary','Jennifer','Jessica','Emily','Emma'],
+	'sex':['F','F','F', 'F','F']
 	}
 
 girls_name_df = pd.DataFrame(girls_name_dict)
@@ -97,6 +106,6 @@ boys_name_dict = {
 
 boys_name_df = pd.DataFrame(boys_name_dict)
 
-name_comparison_graph_v2(girls_name_df)
+name_comparison_graph_v2(girls_name_df, 'WI')
 
 
