@@ -39,6 +39,10 @@ def name_plot(name_dataframe, my_color):
 def sex_color_scheme(sex_df):
 	sex = sex_of_name_dataframe(sex_df)
 	
+	#consider this color dict occassionaly: 'F':["#d67c8e","#c98c3d","#df5b6d","#e6ae80","#d86f41","#b27554","#e78873"],
+	#much prettier, but harder to read.
+	#also, this website is great...http://tools.medialab.sciences-po.fr/iwanthue/
+
 	colors_dict ={
 		'F': ['salmon','orange','gold','lightgreen', 'mediumaquamarine', 'LightSkyBlue', 'plum'],
 		'M': ['CornflowerBlue','MediumSeaGreen','MediumTurquoise','SlateGray','Wheat', 'Sienna','Silver'],
@@ -73,14 +77,15 @@ def name_comparison_graph_v2(names_and_sex_dict, state_name):
 	#figure out total max names, so you know what the upper bound of the x-axis should be. multiply by 1.1 so the top value does not hit the top of the graph
 	max_name_count = most_popular_name_count(names_and_sex['name'], state_df)*1.1
 
-	#build your plots for each name
+	#build your figure
+	plt.figure(1, figsize=(12,fig_height))
+	plt.style.use('seaborn')
+
+	#create a plot for each name	
 	for label, row in names_and_sex.iterrows():
-		plt.figure(1, figsize=(12,fig_height))
-		plt.style.use('seaborn')
 		ax1 = plt.subplot(subplot_col, 4, label+1)
 		name_plot(name_search(row['sex'],row['name'], state_df), plot_colors[label])
 		ax1.set_ylim(0,max_name_count)
-		ax1.set_xlim(1911,2017)
 
 	#build stacked plot for comparing all names
 	ax2 = plt.subplot(subplot_col,4,num_names+1)
@@ -119,6 +124,6 @@ theresa_name_dict = {
 }
 
 #call the function to build the comparison chart. 
-name_comparison_graph_v2(theresa_name_dict, 'MA')
+name_comparison_graph_v2(girls_name_dict, 'MA')
 
 
